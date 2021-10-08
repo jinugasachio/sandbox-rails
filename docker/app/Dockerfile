@@ -4,7 +4,8 @@ RUN apt-get update -qq \
   && apt-get install -y --no-install-recommends \
     nodejs \
     postgresql-client \
-  &&  rm -rf /var/lib/apt/lists/* 
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* 
 
 WORKDIR /sandbox-rails
 
