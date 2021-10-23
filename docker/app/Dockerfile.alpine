@@ -8,10 +8,10 @@ COPY Gemfile.lock /sandbox-rails/Gemfile.lock
 RUN apk update && \
     apk add --no-cache --virtual=build-dependencies build-base && \
     apk add --no-cache \
-      nodejs \
-      postgresql-dev \
-      tzdata \
-      yarn  && \
+        nodejs \
+        postgresql-dev \
+        tzdata \
+        yarn  && \
     bundle install -j4 && \
     apk del build-dependencies
 
