@@ -1,3 +1,32 @@
+FROM ruby:3.0.2-alpine as builder
+
+WORKDIR /sandbox-rails
+
+COPY Gemfile /sandbox-rails/Gemfile
+COPY Gemfile.lock /sandbox-rails/Gemfile.lock
+
+RUN apk update && \
+    apk add --no-cache --virtual=build-dependencies build-base && \
+    apk add --no-cache \
+      nodejs \
+      postgresql-dev \
+      tzdata \
+      yarn  && \
+    bundle install -j4 && \
+    apk del build-dependencies
+
 FROM ruby:3.0.2-alpine
 
-WORKDIR /rails-sandbox
+RUN apk update && \
+    apk add --no-cache \
+        postgresql-dev \
+        tzdata
+
+WORKDIR /sandbox-rails
+
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY . /sandbox-rails
+
+EXPOSE 3000
+
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
