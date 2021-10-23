@@ -20,12 +20,15 @@ FROM ruby:3.0.2-alpine
 RUN apk update && \
     apk add --no-cache \
         postgresql-dev \
-        tzdata
+        tzdata 
 
 WORKDIR /sandbox-rails
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY . /sandbox-rails
+
+RUN adduser -D app && chown -R app /sandbox-rails
+USER app
 
 EXPOSE 3000
 
