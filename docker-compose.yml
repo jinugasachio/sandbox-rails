@@ -3,16 +3,27 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./docker/app/Dockerfile
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      dockerfile: ./docker/app/Dockerfile.alpine
+    command: bundle exec rails s
     volumes:
       - .:/sandbox-rails
+      - tmp_data:/sandbox-rails/tmp
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432
     depends_on:
       - db
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    volumes:
+      - tmp_data:/sandbox-rails/tmp
+    ports:
+      - "80:80"
+    depends_on:
+      - app
   db:
     image: postgres:14.0
     volumes:
@@ -24,3 +35,4 @@ services:
 volumes:
   pg_data:
     driver: local
+  tmp_data:
