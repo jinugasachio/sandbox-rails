@@ -1,4 +1,4 @@
-FROM ruby:3.0.2-alpine as builder
+FROM ruby:3.0.3-alpine as builder
 
 WORKDIR /sandbox-rails
 
@@ -15,7 +15,7 @@ RUN apk update && \
     bundle install -j4 && \
     apk del build-dependencies
 
-FROM ruby:3.0.2-alpine
+FROM ruby:3.0.3-alpine
 
 WORKDIR /sandbox-rails
 
