@@ -3,8 +3,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./docker/app/Dockerfile.alpine
-    command: bundle exec rails s
+      dockerfile: ./docker/app/Dockerfile
+    command: sh -c "rm -f tmp/pids/server.pid && bundle exec rails s"
     volumes:
       - .:/sandbox-rails
       - tmp_data:/sandbox-rails/tmp

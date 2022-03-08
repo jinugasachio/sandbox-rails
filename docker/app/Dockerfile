@@ -1,11 +1,11 @@
-FROM ruby:3.0.2 as builder
+FROM ruby:3.0.3 as builder
 
 RUN apt-get update -qq \
   && apt-get install -y --no-install-recommends \
     nodejs \
     postgresql-client \
   && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* 
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /sandbox-rails
 
@@ -14,7 +14,7 @@ COPY Gemfile.lock /sandbox-rails/Gemfile.lock
 
 RUN bundle install
 
-FROM ruby:3.0.2 
+FROM ruby:3.0.3
 
 WORKDIR /sandbox-rails
 
