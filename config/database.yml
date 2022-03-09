@@ -5,7 +5,6 @@ default: &default
 
 development:
   <<: *default
-  database: sandbox_rails_development
 
 test:
   <<: *default
@@ -13,6 +12,3 @@ test:
 
 production:
   <<: *default
-  database: sandbox_rails_production
-  username: <%= ENV['SANDBOX_RAILS_DATABASE_USER'] %>
-  password: <%= ENV['SANDBOX_RAILS_DATABASE_PASSWORD'] %>
