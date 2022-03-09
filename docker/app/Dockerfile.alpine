@@ -23,13 +23,16 @@ RUN apk update && \
     apk add --no-cache \
         postgresql-dev \
         tzdata && \
+    mkdir -p /sandbox-rails/tmp/sockets && \
     adduser -D app && chown -R app /sandbox-rails
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY . /sandbox-rails
 
+VOLUME /sandbox-rails/tmp
+
 USER app
 
 EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "server"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
