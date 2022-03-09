@@ -13,8 +13,7 @@ services:
       - db
   web:
     build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
+      context: ./docker/nginx
     volumes_from:
       - app:ro
     ports:
