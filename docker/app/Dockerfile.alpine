@@ -23,7 +23,8 @@ RUN apk update && \
     apk add --no-cache \
         curl \
         postgresql-dev \
-        tzdata && \
+        tzdata \
+        util-linux && \
     mkdir -p /sandbox-rails/tmp/sockets && \
     adduser -D app && chown -R app /sandbox-rails
 
