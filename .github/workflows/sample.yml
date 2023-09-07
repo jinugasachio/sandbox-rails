@@ -3,7 +3,7 @@ name: GCP Demo
 on:
   push:
     branches:
-      - gcp-test
+      - main
     tags:
       - "v**"
 jobs:
