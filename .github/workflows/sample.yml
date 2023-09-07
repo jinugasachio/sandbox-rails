@@ -2,12 +2,11 @@ name: GCP Demo
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - "v**"
+      - v**
 jobs:
   Explore-GitHub-Actions:
+    if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
