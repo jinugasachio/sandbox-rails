@@ -18,7 +18,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          token_format: "access_token"
+          # token_format: "access_token"
           workload_identity_provider: 'projects/1079700346748/locations/global/workloadIdentityPools/jinugasachio/providers/github-actions'
           service_account: 'github-actions-oidc@jinugasachio.iam.gserviceaccount.com'
       - name: Login to GCR
@@ -27,4 +27,3 @@ jobs:
           registry: gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
-          
