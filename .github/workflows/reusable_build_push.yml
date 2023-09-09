@@ -29,6 +29,7 @@ on:
 
 jobs:
   build_push:
+    name: build-push image
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
