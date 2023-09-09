@@ -2,12 +2,12 @@ name: GCP Demo
 
 on:
   push:
-    # tags:
-    #   - v**
+    tags:
+      - v**
 
 jobs:
   call_build_push_workflow:
-    # if: ${{ github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'main' }}
     name: Call workflow
     uses: ./.github/workflows/reusable_build_push.yml
     with:
