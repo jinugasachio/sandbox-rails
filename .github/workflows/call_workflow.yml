@@ -1,0 +1,21 @@
+name: GCP Demo
+
+on:
+  push:
+    # tags:
+    #   - v**
+
+jobs:
+  call_build_push_workflow:
+    # if: ${{ github.ref_name == 'main' }}
+    uses: ./reusable_build_push.yml
+    with:
+      context: ./docker/nginx
+      file: ./docker/nginx/Dockerfile
+      gcr_project_id: jinugasachio
+      gcr_repository_host: gcr.io
+      gcr_repository_name: nginx
+    secrets:
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account_address: ${{ secrets.SERVICE_ACCOUNT_ADDRESS }}
+      
