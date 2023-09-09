@@ -8,7 +8,7 @@ on:
 jobs:
   call_build_push_workflow:
     # if: ${{ github.ref_name == 'main' }}
-    uses: ./reusable_build_push.yml
+    uses: ./.github/workflows/reusable_build_push.yml
     with:
       context: ./docker/nginx
       file: ./docker/nginx/Dockerfile
