@@ -6,19 +6,14 @@ on:
       context:
         type: string
         default: .
+        required: false
       file:
         type: string
         required: true
       push:
         type: boolean
         default: true
-      gcr_project_id:
-        type: string
-        required: true
       gcr_repository_host:
-        type: string
-        required: true
-      gcr_repository_name:
         type: string
         required: true
     secrets:
@@ -37,41 +32,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
-      - name: Set up buildx
-        uses: docker/setup-buildx-action@v2
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+      - name: Build-Push
+        uses: ./.github/actions/build_push
         with:
-          token_format: access_token
           workload_identity_provider: ${{ secrets.workload_identity_provider }}
-          service_account: ${{ secrets.service_account_address }}
-
-      - name: Login to GCR
-        uses: docker/login-action@v2
-        with:
-          registry: gcr.io
-          username: oauth2accesstoken
-          password: ${{ steps.auth.outputs.access_token }}
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ inputs.gcr_repository_host}}/${{ inputs.gcr_project_id }}/${{ inputs.gcr_repository_name }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=sha,format=short
-
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
+          service_account_address: ${{ secrets.service_account_address }}
+          gcr_repository_host: ${{ inputs.gcr_repository_host }}
           context: ${{ inputs.context }}
           file: ${{ inputs.file }}
-          push: ${{ inputs.push }}
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false # NOTE: prevent this https://github.com/docker/build-push-action/issues/767

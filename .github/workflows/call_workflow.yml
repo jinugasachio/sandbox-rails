@@ -13,9 +13,7 @@ jobs:
     with:
       context: ./docker/nginx
       file: ./docker/nginx/Dockerfile
-      gcr_project_id: jinugasachio
-      gcr_repository_host: gcr.io
-      gcr_repository_name: nginx
+      gcr_repository_host: gcr.io/jinugasachio/nginx
     secrets:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       service_account_address: ${{ secrets.SERVICE_ACCOUNT_ADDRESS }}
