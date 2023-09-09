@@ -1,0 +1,63 @@
+name: Build-Push
+description: Build and push image or only build image
+inputs:
+  workload_identity_provider:
+    description: Principal of identity provider for OIDC authentication
+    required: true
+  service_account_address:
+    description: Service account address for GCP 
+    required: true
+  gcr_repository_host:
+    description: Repository host of GCR
+  context:
+    description: Build context
+    required: false
+    default: .
+  file:
+    description: file path to Dockerfile
+    required: true
+  push:
+    description: whether push image or not(=only build)
+    required: false
+    default: 'true'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: access_token
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account_address }}
+
+    - name: Login to GCR
+      uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: oauth2accesstoken
+        password: ${{ steps.auth.outputs.access_token }}
+
+    - name: Set docker metadata
+      id: metadata
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ inputs.gcr_repository_host}}
+        tags: |
+          type=semver,pattern={{version}}
+          type=sha,format=short
+
+    - name: Build-Push image
+      uses: docker/build-push-action@v4
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.file }}
+        push: ${{ inputs.push }}
+        tags: ${{ steps.metadata.outputs.tags }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        provenance: false # NOTE: prevent this https://github.com/docker/build-push-action/issues/767

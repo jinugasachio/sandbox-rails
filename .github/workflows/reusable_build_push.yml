@@ -1,0 +1,43 @@
+name: Reusable build-push workflow 
+
+on:
+  workflow_call:
+    inputs:
+      context:
+        type: string
+        default: .
+        required: false
+      file:
+        type: string
+        required: true
+      push:
+        type: boolean
+        default: true
+      gcr_repository_host:
+        type: string
+        required: true
+    secrets:
+      workload_identity_provider:
+        required: true
+      service_account_address:
+        required: true
+
+jobs:
+  build_push:
+    name: build-push image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build-Push
+        uses: ./.github/actions/build_push
+        with:
+          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+          service_account_address: ${{ secrets.service_account_address }}
+          gcr_repository_host: ${{ inputs.gcr_repository_host }}
+          context: ${{ inputs.context }}
+          file: ${{ inputs.file }}
