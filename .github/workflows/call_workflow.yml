@@ -17,4 +17,3 @@ jobs:
     secrets:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       service_account_address: ${{ secrets.SERVICE_ACCOUNT_ADDRESS }}
-      
